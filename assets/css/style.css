@@ -1,0 +1,153 @@
+html {
+    scroll-behavior: smooth;
+}
+
+.fast-buy.categories {
+    background: white;
+    padding: 30px 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    box-shadow: 1px 1px 3px #ccc;
+    margin-bottom: 50px;
+}
+
+.fast-buy .cat-thumbnail {
+    width: 100px;
+    border-radius: 50px;
+    box-shadow: 1px 1px 5px #ccc;
+    border: 1px solid;
+    margin: 10px;
+    display: block;
+}
+
+.fast-buy .cat-title {
+    text-shadow: 1px 1px 3px #ccc;
+}
+
+.fast-buy .d-flex {
+    display: flex;
+    align-content: space-between;
+    justify-content: space-evenly;
+    align-items: stretch;
+    flex-wrap: wrap;
+}
+
+.fast-buy .cat-link {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+
+.fast-buy .subcat-thumbnail-title {
+    width: 30px;
+    border-radius: 20px;
+    margin: 0 20px;
+}
+
+.fast-buy .card-title {
+    background: #ccc;
+    border-radius: 5px;
+    padding: 10px;
+    margin: 20px 0;
+    color: white;
+    font-weight: bold;
+}
+
+.fast-buy .card-sub-title {
+    background: linear-gradient(140deg, rgba(2, 0, 36, 0) 0%, rgba(198, 213, 255, 0.4430147058823529) 75%, rgba(128, 180, 255, 0.7315301120448179) 100%);
+    border-radius: 5px;
+    padding: 10px;
+    margin: 20px;
+    font-weight: bold;
+    text-align: right;
+}
+
+.fast-buy .product-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    background: #cccccc42;
+    padding: 10px;
+    margin: 10px 60px;
+    border-radius: 5px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.fast-buy .product-item:hover {
+    background: #a8a9ab;
+}
+
+.fast-buy .product-item .product-title {
+    width: 40%;
+}
+
+.fast-buy .product-item .product-addtocard a {
+    border-radius: 5px;
+    width: 150px;
+}
+
+.product-item .product-color {
+    display: flex;
+    width: 15%;
+}
+
+.product-item .product-color .attr-color {
+    width: 20px;
+    height: 20px;
+    border-radius: 20px;
+    margin-left: 10px;
+    border: 1px solid;
+}
+
+.added_to_cart {
+    padding: 5px 20px;
+    min-height: var(--btn-height);
+    font-size: 13px;
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    outline: none;
+    border: 0px solid transparent;
+    border-radius: 0;
+    box-shadow: none;
+    vertical-align: middle;
+    text-align: center;
+    text-decoration: none;
+    text-transform: var(--btn-transform);
+    text-shadow: none;
+    font-weight: var(--btn-font-weight);
+    font-family: var(--btn-font-family);
+    font-style: var(--btn-font-style);
+    line-height: 1.2;
+    cursor: pointer;
+    transition: color .25s ease, background-color .25s ease, border-color .25s ease, box-shadow .25s ease, opacity .25s ease;
+    color: var(--btn-color, #3E3E3E);
+    background-color: var(--btn-bgcolor, #F3F3F3);
+    margin-right: 5px;
+}
+
+@media only screen and (max-width: 768px) {
+
+    /* For mobile phones: */
+    .fast-buy .product-item {
+        margin: 5px 0 !important;
+        padding: 10px 15px !important;
+    }
+
+    .fast-buy .product-item .product-title {
+        width: 100% !important;
+        display: block !important;
+    }
+
+    .product-item .product-color {
+        width: 50% !important;
+        margin: 10px !important;
+    }
+
+    .fast-buy .product-item .product-addtocard a {
+        border-radius: 5px !important;
+        width: 100% !important;
+    }
+}
