@@ -16,7 +16,7 @@ if (!woodmart_is_woo_ajax()) {
 
 $settings = get_option('woofaster_options');
 
-if (!isset($settings['show_cart']) || $settings['show_cart'] == 'active') {
+if (!isset($settings['show_cart']) || $settings['show_cart'] == 'inactive') {
     echo '<style>a.added_to_cart {display: none;}</style>';
 }
 
@@ -118,6 +118,10 @@ if (!isset($settings['show_cart']) || $settings['show_cart'] == 'active') {
                                         <a href="<?php echo esc_url(get_permalink($product_item->get_id())); ?>" title="<?php echo esc_attr($product_item->get_title()); ?>">
                                             <?php echo $product_item->get_title(); ?>
                                         </a>
+                                        <?php
+                                        if (count($product->get_children()) == 0) { ?>
+                                            <span class="not-available">عدم موجودی</span>
+                                        <?php } ?>
                                     </div>
                                     <div class="card-body">
                                         <?php
@@ -199,7 +203,7 @@ if (!isset($settings['show_cart']) || $settings['show_cart'] == 'active') {
             if (content.style.maxHeight) {
                 content.style.maxHeight = null;
             } else {
-                content.style.maxHeight = content.scrollHeight + "px";
+                content.style.maxHeight = "0px"; //content.scrollHeight + "px";
             }
         });
     }

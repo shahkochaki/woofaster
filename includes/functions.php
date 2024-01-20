@@ -96,7 +96,7 @@ function woofaster_section_developers_callback($args)
 {
 ?>
 	<img src="<?php echo plugin_dir_url(__FILE__) . '../assets/images/header.jpg' ?>" alt="Woo Faster">
-	<p id="<?php echo esc_attr($args['id']); ?>">تنظیمات ظاهری - نسخه v1.0.2</p>
+	<p id="<?php echo esc_attr($args['id']); ?>">تنظیمات ظاهری - نسخه v1.2.01</p>
 <?php
 }
 
