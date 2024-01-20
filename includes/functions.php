@@ -48,6 +48,19 @@ function woofaster_settings_init()
 	);
 
 	add_settings_field(
+		'woofaster_show_cart',
+		'گزینه مشاهده سبد خرید',
+		'woofaster_field_show_cart',
+		'woofaster',
+		'woofaster_section_developers',
+		[
+			'label_for'         => 'show_cart',
+			'class'             => 'row',
+			'woofaster_custom_data' => 'custom',
+		]
+	);
+
+	add_settings_field(
 		'woofaster_category_color',
 		'پس زمینه دسته بندی های اصلی',
 		'woofaster_field_color',
@@ -83,7 +96,7 @@ function woofaster_section_developers_callback($args)
 {
 ?>
 	<img src="<?php echo plugin_dir_url(__FILE__) . '../assets/images/header.jpg' ?>" alt="Woo Faster">
-	<p id="<?php echo esc_attr($args['id']); ?>">تنظیمات ظاهری</p>
+	<p id="<?php echo esc_attr($args['id']); ?>">تنظیمات ظاهری - نسخه v1.0.2</p>
 <?php
 }
 
@@ -94,7 +107,8 @@ function woofaster_field_license($args)
 	$options = get_option('woofaster_options');
 ?>
 	<input type="text" dir="ltr" name="woofaster_options[<?php echo esc_attr($args['label_for']); ?>]" value="<?php echo $options[$args['label_for']]; ?>">
-	<b><?php if(check_license()) echo 'لایسنس شما با موفقیت فعال شده است.'; else echo 'لایسنس نا معتبر'; ?></b>
+	<b><?php if (check_license()) echo 'لایسنس شما با موفقیت فعال شده است.';
+		else echo 'لایسنس نا معتبر'; ?></b>
 	<p class="description">
 		لطفا کد فعالسازی دریافت شده را در این قسمت وارد نمائید.
 	</p>
@@ -122,6 +136,26 @@ function woofaster_field_header_category($args)
 	</p>
 	<p class="description">
 		در صورت فعال بودن این گزینه در بالای صفحه دسته بندی های جهت دسترسی بهتر نمایش داده می شود.
+	</p>
+<?php
+}
+
+
+function woofaster_field_show_cart($args)
+{
+	// Get the value of the setting we've registered with register_setting()
+	$options = get_option('woofaster_options');
+?>
+	<select id="<?php echo esc_attr($args['label_for']); ?>" data-custom="<?php echo esc_attr($args['woofaster_custom_data']); ?>" name="woofaster_options[<?php echo esc_attr($args['label_for']); ?>]">
+		<option value="active" <?php echo isset($options[$args['label_for']]) ? (selected($options[$args['label_for']], 'active', false)) : (''); ?>>
+			فعال
+		</option>
+		<option value="inactive" <?php echo isset($options[$args['label_for']]) ? (selected($options[$args['label_for']], 'inactive', false)) : (''); ?>>
+			غیرفعال
+		</option>
+	</select>
+	<p class="description">
+		جهت مشاهده گزینه مشاهده سبد خرید در لیست آیتم ها این گزینه را فعال نمائید.
 	</p>
 <?php
 }
@@ -235,8 +269,8 @@ add_filter('init', 'add_woofaster_woocommerce_category');
 function check_license()
 {
 	$options = get_option('woofaster_options');
-    if (hash('sha256', substr($options['license'], 0, 7) . 'woofaster') == substr($options['license'], 7))
-        return true;
-    else
-        return false;
+	if (hash('sha256', substr($options['license'], 0, 7) . 'woofaster') == substr($options['license'], 7))
+		return true;
+	else
+		return false;
 }

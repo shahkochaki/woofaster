@@ -53,14 +53,33 @@ html {
     font-weight: bold;
 }
 
+.fast-buy .collapsible:after {
+    content: '\002B';
+    font-weight: bold;
+    float: left;
+    margin-right: 5px;
+}
+
+.fast-buy .collapsible.active:after {
+    content: "\2212";
+}
+
+
 .fast-buy .card-sub-title {
     background: linear-gradient(140deg, rgba(2, 0, 36, 0) 0%, rgba(198, 213, 255, 0.4430147058823529) 75%, rgba(128, 180, 255, 0.7315301120448179) 100%);
     border-radius: 5px;
     padding: 10px;
-    margin: 20px;
+    margin: 10px 20px;
     font-weight: bold;
     text-align: right;
 }
+
+.fast-buy .card-body {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease-out;
+}
+
 
 .fast-buy .product-item {
     display: flex;
@@ -78,8 +97,13 @@ html {
     background: #a8a9ab;
 }
 
-.fast-buy .product-item .product-title {
-    width: 40%;
+.fast-buy .product-title {
+    background: linear-gradient(140deg, rgba(2, 0, 36, 0) 0%, rgba(198, 213, 255, 0.4430147058823529) 75%, rgba(128, 180, 255, 0.7315301120448179) 100%);
+    border-radius: 5px;
+    padding: 10px;
+    margin: 10px 40px;
+    font-weight: bold;
+    text-align: right;
 }
 
 .fast-buy .product-item .product-addtocard a {

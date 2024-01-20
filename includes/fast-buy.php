@@ -15,6 +15,11 @@ if (!woodmart_is_woo_ajax()) {
 }
 
 $settings = get_option('woofaster_options');
+
+if (!isset($settings['show_cart']) || $settings['show_cart'] == 'active') {
+    echo '<style>a.added_to_cart {display: none;}</style>';
+}
+
 ?>
 <div class="fast-buy categories <?php echo esc_attr($content_class); ?>">
     <div class="site-content page-fast-buy <?php echo esc_attr($content_class); ?>" role="main">
@@ -68,7 +73,7 @@ $settings = get_option('woofaster_options');
                     foreach ($main_categories as $category) {
                         $thumbnail_id = get_term_meta($category->term_id, 'thumbnail_id', true);
                         $image = wp_get_attachment_url($thumbnail_id);
-                        echo "<div class='card-title text-center' style='background:{$settings['category_color']}' id='{$category->slug}'><img class='subcat-thumbnail-title' src='{$image}' alt='{$category->name}' />{$category->name}</div>";
+                        echo "<div class='card-title collapsible text-center' style='background:{$settings['category_color']}' id='{$category->slug}'><img class='subcat-thumbnail-title' src='{$image}' alt='{$category->name}' />{$category->name}</div><div class='card-body'>";
 
                         $argsSubCat = [
                             'taxonomy' => $taxonomy,
@@ -89,7 +94,7 @@ $settings = get_option('woofaster_options');
                             if (count(get_categories($argsSubCat)) > 0) {
                                 $thumbnail_id = get_term_meta($sscat->term_id, 'thumbnail_id', true);
                                 $image = wp_get_attachment_url($thumbnail_id);
-                                echo "<div class='card-sub-title text-center' style='background:{$settings['subcategory_color']}' id='{$sscat->slug}'><img class='subcat-thumbnail-title' src='{$image}' alt='{$sscat->name}' />{$sscat->name}</div>";
+                                echo "<div class='card-sub-title collapsible text-center' style='background:{$settings['subcategory_color']}' id='{$sscat->slug}'><img class='subcat-thumbnail-title' src='{$image}' alt='{$sscat->name}' />{$sscat->name}</div><div class='card-body'>";
                             }
 
                             $argsProductsCat = new WC_Product_Query([
@@ -108,71 +113,97 @@ $settings = get_option('woofaster_options');
                             $products = $argsProductsCat->get_products();
                             if (count($products) > 0) {
                                 foreach ($products as $product) :
-                                    foreach ($product->get_children() as $child) :
-                                        $product_child = wc_get_product($child); ?>
-                                        <div class="product-item">
-                                            <a class="product-title" href="<?php echo esc_url(get_permalink($product_child->get_id())); ?>" title="<?php echo esc_attr($product_child->get_title()); ?>">
-                                                <?php echo $product_child->get_title(); ?>
-                                            </a>
-                                            <div class="product-color">
-                                                <?php
-                                                $attributes = $product_child->get_attributes();
-                                                // echo $attributes['pa_color'];
-                                                echo "<span class='attr-color' style='background:{$attributes['pa_color']}'></span>" . $product_child->get_attribute('pa_color');
-                                                ?>
-                                            </div>
-                                            <span class="product-price">
-                                                <?php echo $product_child->get_price_html(); ?>
-                                            </span>
-                                            <span class="product-addtocard">
-                                                <?php
-                                                echo apply_filters(
-                                                    'woocommerce_loop_add_to_cart_link',
-                                                    sprintf(
-                                                        '<a href="%s" rel="nofollow" data-product_id="%s" data-product_sku="%s" class="button %s product_type_%s">%s</a>',
-                                                        esc_url($product_child->add_to_cart_url()),
-                                                        esc_attr($product_child->id),
-                                                        esc_attr($product_child->get_sku()),
-                                                        implode(
-                                                            ' ',
-                                                            array_filter(
-                                                                [
-                                                                    'button',
-                                                                    'product_type_' . $product_child->product_type,
-                                                                    $product_child->is_purchasable() && $product_child->is_in_stock() ? 'add_to_cart_button' : '',
-                                                                    $product_child->supports('ajax_add_to_cart') ? 'ajax_add_to_cart' : ''
-                                                                ]
-                                                            )
+                                    $product_item = wc_get_product($product); ?>
+                                    <div class="product-title collapsible">
+                                        <a href="<?php echo esc_url(get_permalink($product_item->get_id())); ?>" title="<?php echo esc_attr($product_item->get_title()); ?>">
+                                            <?php echo $product_item->get_title(); ?>
+                                        </a>
+                                    </div>
+                                    <div class="card-body">
+                                        <?php
+                                        foreach ($product->get_children() as $child) :
+                                            $product_child = wc_get_product($child); ?>
+                                            <div class="product-item">
+                                                <div class="product-color">
+                                                    <?php
+                                                    $attributes = $product_child->get_attributes();
+                                                    // echo $attributes['pa_color'];
+                                                    echo "<span class='attr-color' style='background:{$attributes['pa_color']}'></span>" . $product_child->get_attribute('pa_color');
+                                                    ?>
+                                                </div>
+                                                <span class="product-price">
+                                                    <?php echo $product_child->get_price_html(); ?>
+                                                </span>
+                                                <span class="product-addtocard">
+                                                    <?php
+                                                    echo apply_filters(
+                                                        'woocommerce_loop_add_to_cart_link',
+                                                        sprintf(
+                                                            '<a href="%s" rel="nofollow" data-product_id="%s" data-product_sku="%s" class="button %s product_type_%s">%s</a>',
+                                                            esc_url($product_child->add_to_cart_url($product_child->get_id(), 1)),
+                                                            esc_attr($product_child->get_id()),
+                                                            esc_attr($product_child->get_sku()),
+                                                            implode(
+                                                                ' ',
+                                                                array_filter(
+                                                                    [
+                                                                        'button',
+                                                                        'product_type_' . $product_child->product_type,
+                                                                        $product_child->is_purchasable() && $product_child->is_in_stock() ? 'add_to_cart_button' : '',
+                                                                        $product_child->supports('ajax_add_to_cart') ? 'ajax_add_to_cart' : ''
+                                                                    ]
+                                                                )
+                                                            ),
+                                                            esc_attr($product_child->product_type),
+                                                            $product_child->add_to_cart_text(),
+                                                            esc_attr(isset($class) ? $class : 'button'),
                                                         ),
-                                                        esc_attr($product_child->product_type),
-                                                        $product_child->add_to_cart_text(),
-                                                        esc_attr(isset($class) ? $class : 'button'),
-                                                    ),
-                                                    $product_child
-                                                );
-                                                ?>
-                                            </span>
-                                        </div>
-                <?php
-                                    endforeach;
-                                endforeach;
+                                                        $product_child
+                                                    );
+                                                    ?>
+                                                </span>
+                                            </div>
+                                        <?php
+                                        endforeach;
+                                        ?>
+                                    </div> <?php
+                                        endforeach;
+                                            ?>
+            </div> <?php
                             } else {
                                 echo __('در این دسته محصولی یافت نشد!');
                             }
                             wp_reset_postdata();
                         }
+                    ?>
+    </div> <?php
                     }
                 }
                 wp_reset_postdata();
-                ?>
-            </div>
-        <?php
+            ?>
+</div>
+<?php
         else :
             echo '<center>افزونه شما بصورت قانونی فعال نشده است لطفا از طریق <a href="/wp-admin/admin.php?page=woofaster">پنل پیشخوان</a> نسبت به فعالسازی آن اقدام نمائید.</center>';
         endif;
-        ?>
-    </div>
+?>
 </div>
+</div>
+<script>
+    var coll = document.getElementsByClassName("collapsible");
+    var i;
+    for (i = 0; i < coll.length; i++) {
+        coll[i].addEventListener("click", function() {
+            this.classList.toggle("active");
+            var content = this.nextElementSibling;
+            if (content.style.maxHeight) {
+                content.style.maxHeight = null;
+            } else {
+                content.style.maxHeight = content.scrollHeight + "px";
+            }
+        });
+    }
+</script>
 <?php
 if (!woodmart_is_woo_ajax()) {
     get_footer();
