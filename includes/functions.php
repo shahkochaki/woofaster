@@ -61,6 +61,58 @@ function woofaster_settings_init()
 	);
 
 	add_settings_field(
+		'woofaster_unavailable_products',
+		'نمایش محصولات ناموجود',
+		'woofaster_field_unavailable_products',
+		'woofaster',
+		'woofaster_section_developers',
+		[
+			'label_for'         => 'unavailable_products',
+			'class'             => 'row',
+			'woofaster_custom_data' => 'custom',
+		]
+	);
+
+	add_settings_field(
+		'woofaster_items_in_category',
+		'حالت نمایش زیرمجموعه های دسته اصلی',
+		'woofaster_field_items_in_category',
+		'woofaster',
+		'woofaster_section_developers',
+		[
+			'label_for'         => 'items_in_category',
+			'class'             => 'row',
+			'woofaster_custom_data' => 'custom',
+		]
+	);
+
+	add_settings_field(
+		'woofaster_items_in_product',
+		'حالت نمایش زیرمجموعه های محصول',
+		'woofaster_field_items_in_product',
+		'woofaster',
+		'woofaster_section_developers',
+		[
+			'label_for'         => 'items_in_product',
+			'class'             => 'row',
+			'woofaster_custom_data' => 'custom',
+		]
+	);
+
+	add_settings_field(
+		'woofaster_count_product',
+		'تعداد نمایش زیرمجموعه های محصول',
+		'woofaster_field_count_product',
+		'woofaster',
+		'woofaster_section_developers',
+		[
+			'label_for'         => 'count_product',
+			'class'             => 'row',
+			'woofaster_custom_data' => 'custom',
+		]
+	);
+
+	add_settings_field(
 		'woofaster_category_color',
 		'پس زمینه دسته بندی های اصلی',
 		'woofaster_field_color',
@@ -123,7 +175,7 @@ function woofaster_field_header_category($args)
 	// Get the value of the setting we've registered with register_setting()
 	$options = get_option('woofaster_options');
 ?>
-	<select id="<?php echo esc_attr($args['label_for']); ?>" data-custom="<?php echo esc_attr($args['woofaster_custom_data']); ?>" name="woofaster_options[<?php echo esc_attr($args['label_for']); ?>]">
+	<select id="<?php echo esc_attr($args['label_for']); ?>" style="min-width: 300px;" data-custom="<?php echo esc_attr($args['woofaster_custom_data']); ?>" name="woofaster_options[<?php echo esc_attr($args['label_for']); ?>]">
 		<option value="active" <?php echo isset($options[$args['label_for']]) ? (selected($options[$args['label_for']], 'active', false)) : (''); ?>>
 			فعال
 		</option>
@@ -146,7 +198,7 @@ function woofaster_field_show_cart($args)
 	// Get the value of the setting we've registered with register_setting()
 	$options = get_option('woofaster_options');
 ?>
-	<select id="<?php echo esc_attr($args['label_for']); ?>" data-custom="<?php echo esc_attr($args['woofaster_custom_data']); ?>" name="woofaster_options[<?php echo esc_attr($args['label_for']); ?>]">
+	<select id="<?php echo esc_attr($args['label_for']); ?>" style="min-width: 300px;" data-custom="<?php echo esc_attr($args['woofaster_custom_data']); ?>" name="woofaster_options[<?php echo esc_attr($args['label_for']); ?>]">
 		<option value="active" <?php echo isset($options[$args['label_for']]) ? (selected($options[$args['label_for']], 'active', false)) : (''); ?>>
 			فعال
 		</option>
@@ -156,6 +208,88 @@ function woofaster_field_show_cart($args)
 	</select>
 	<p class="description">
 		جهت مشاهده گزینه مشاهده سبد خرید در لیست آیتم ها این گزینه را فعال نمائید.
+	</p>
+<?php
+}
+
+function woofaster_field_unavailable_products($args)
+{
+	// Get the value of the setting we've registered with register_setting()
+	$options = get_option('woofaster_options');
+?>
+	<select id="<?php echo esc_attr($args['label_for']); ?>" style="min-width: 300px;" data-custom="<?php echo esc_attr($args['woofaster_custom_data']); ?>" name="woofaster_options[<?php echo esc_attr($args['label_for']); ?>]">
+		<option value="active" <?php echo isset($options[$args['label_for']]) ? (selected($options[$args['label_for']], 'active', false)) : (''); ?>>
+			فعال
+		</option>
+		<option value="inactive" <?php echo isset($options[$args['label_for']]) ? (selected($options[$args['label_for']], 'inactive', false)) : (''); ?>>
+			غیرفعال
+		</option>
+	</select>
+	<p class="description">
+		جهت مشاهده محصولات ناموجود در لیست آیتم ها این گزینه را فعال نمائید.
+	</p>
+<?php
+}
+
+function woofaster_field_items_in_category($args)
+{
+	// Get the value of the setting we've registered with register_setting()
+	$options = get_option('woofaster_options');
+?>
+	<select id="<?php echo esc_attr($args['label_for']); ?>" style="min-width: 300px;" data-custom="<?php echo esc_attr($args['woofaster_custom_data']); ?>" name="woofaster_options[<?php echo esc_attr($args['label_for']); ?>]">
+		<option value="open" <?php echo isset($options[$args['label_for']]) ? (selected($options[$args['label_for']], 'open', false)) : (''); ?>>
+			حالت نمایش فعال
+		</option>
+		<option value="close" <?php echo isset($options[$args['label_for']]) ? (selected($options[$args['label_for']], 'close', false)) : (''); ?>>
+			حالت جمع شده فعال
+		</option>
+	</select>
+	<p class="description">
+		جهت نمایش زیر دسته بندی های بصورت بسته یا باز گزینه ی مناسب را انتخاب نمائید.
+	</p>
+<?php
+}
+
+function woofaster_field_items_in_product($args)
+{
+	// Get the value of the setting we've registered with register_setting()
+	$options = get_option('woofaster_options');
+?>
+	<select id="<?php echo esc_attr($args['label_for']); ?>" style="min-width: 300px;" data-custom="<?php echo esc_attr($args['woofaster_custom_data']); ?>" name="woofaster_options[<?php echo esc_attr($args['label_for']); ?>]">
+		<option value="open" <?php echo isset($options[$args['label_for']]) ? (selected($options[$args['label_for']], 'open', false)) : (''); ?>>
+			حالت نمایش فعال
+		</option>
+		<option value="close" <?php echo isset($options[$args['label_for']]) ? (selected($options[$args['label_for']], 'close', false)) : (''); ?>>
+			حالت جمع شده فعال
+		</option>
+	</select>
+	<p class="description">
+		جهت نمایش آیتم های محصولات بصورت بسته یا باز گزینه ی مناسب را انتخاب نمائید.
+	</p>
+<?php
+}
+
+function woofaster_field_count_product($args)
+{
+	// Get the value of the setting we've registered with register_setting()
+	$options = get_option('woofaster_options');
+?>
+	<select id="<?php echo esc_attr($args['label_for']); ?>" style="min-width: 300px;" data-custom="<?php echo esc_attr($args['woofaster_custom_data']); ?>" name="woofaster_options[<?php echo esc_attr($args['label_for']); ?>]">
+		<option value="10" <?php echo isset($options[$args['label_for']]) ? (selected($options[$args['label_for']], '10', false)) : (''); ?>>
+			10 محصول
+		</option>
+		<option value="20" <?php echo isset($options[$args['label_for']]) ? (selected($options[$args['label_for']], '20', false)) : (''); ?>>
+			20 محصول
+		</option>
+		<option value="50" <?php echo isset($options[$args['label_for']]) ? (selected($options[$args['label_for']], '50', false)) : (''); ?>>
+			50 محصول
+		</option>
+		<option value="100" <?php echo isset($options[$args['label_for']]) ? (selected($options[$args['label_for']], '100', false)) : (''); ?>>
+			100 محصول
+		</option>
+	</select>
+	<p class="description">
+		لطفا با توجه به نیاز خود تعداد محصولات نمایش داده شده را تعیین فرمائید. توجه داشته باشید که تعداد نمایش کاملا با سرعت بارگزاری درگیر خواهد بود
 	</p>
 <?php
 }

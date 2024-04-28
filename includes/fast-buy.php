@@ -94,7 +94,8 @@ if (!isset($settings['show_cart']) || $settings['show_cart'] == 'inactive') {
                             if (count(get_categories($argsSubCat)) > 0) {
                                 $thumbnail_id = get_term_meta($sscat->term_id, 'thumbnail_id', true);
                                 $image = wp_get_attachment_url($thumbnail_id);
-                                echo "<div class='card-sub-title collapsible text-center' style='background:{$settings['subcategory_color']}' id='{$sscat->slug}'><img class='subcat-thumbnail-title' src='{$image}' alt='{$sscat->name}' />{$sscat->name}</div><div class='card-body'>";
+                                echo "<div class='card-sub-title collapsible text-center " . (isset($settings['items_in_category']) && $settings['items_in_category'] == 'close' ?  'active' : '') . "' style='background:{$settings['subcategory_color']}' id='{$sscat->slug}'><img class='subcat-thumbnail-title' src='{$image}' alt='{$sscat->name}' />{$sscat->name}</div>";
+                                echo "<div class='card-body' " . (isset($settings['items_in_category']) && $settings['items_in_category'] == 'close' ?  'style="max-height: 0px;"' : '') . ">";
                             }
 
                             $argsProductsCat = new WC_Product_Query([
@@ -108,13 +109,16 @@ if (!isset($settings['show_cart']) || $settings['show_cart'] == 'inactive') {
                                         'terms'     =>  [$sscat->term_id], // When you have more term_id's seperate them by komma.
                                         'operator'  => 'IN'
                                     ]
-                                ]
+                                ],
+                                'posts_per_page' => (isset($settings['count_product']) ? $settings['count_product'] : 10) // تعداد محصولاتی که می‌خواهید نمایش دهید
                             ]);
                             $products = $argsProductsCat->get_products();
                             if (count($products) > 0) {
+
                                 foreach ($products as $product) :
+                                    if (isset($settings['unavailable_products']) && $settings['unavailable_products'] == 'inactive' && count($product->get_children()) == 0) continue;
                                     $product_item = wc_get_product($product); ?>
-                                    <div class="product-title collapsible">
+                                    <div class="product-title collapsible <?php if (isset($settings['items_in_product']) && $settings['items_in_product'] == 'close') echo 'active'; ?>">
                                         <a href="<?php echo esc_url(get_permalink($product_item->get_id())); ?>" title="<?php echo esc_attr($product_item->get_title()); ?>">
                                             <?php echo $product_item->get_title(); ?>
                                         </a>
@@ -123,10 +127,11 @@ if (!isset($settings['show_cart']) || $settings['show_cart'] == 'inactive') {
                                             <span class="not-available">عدم موجودی</span>
                                         <?php } ?>
                                     </div>
-                                    <div class="card-body">
+                                    <div class="card-body" <?php if (isset($settings['items_in_product']) && $settings['items_in_product'] == 'close') echo 'style="max-height: 0px;"'; ?>>
                                         <?php
                                         foreach ($product->get_children() as $child) :
-                                            $product_child = wc_get_product($child); ?>
+                                            $product_child = wc_get_product($child);
+                                        ?>
                                             <div class="product-item">
                                                 <div class="product-color">
                                                     <?php
